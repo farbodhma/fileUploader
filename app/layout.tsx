@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { companyConfig } from "../config/company";
 
 export const metadata: Metadata = {
-  title: "آپلود فایل - File Uploader",
-  description: "برنامه امن آپلود فایل",
+  title: `سامانه آپلود فایل - ${companyConfig.company.name}`,
+  description: `${companyConfig.messages.welcome} - ${companyConfig.company.type}`,
+  keywords: `${companyConfig.company.name}, آپلود فایل, ${companyConfig.company.type}`,
+  authors: [{ name: companyConfig.company.name }],
 };
 
 export default function RootLayout({

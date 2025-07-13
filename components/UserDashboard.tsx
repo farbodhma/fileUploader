@@ -8,6 +8,8 @@ import { FileUpload } from "./FileUpload";
 import { ProgressBar } from "./ProgressBar";
 import { TemporaryAccount, UploadedFile } from "../types";
 import { FileService } from "../services/fileService";
+import { companyConfig } from "../config/company";
+import { Footer } from "./Footer";
 import {
   Download,
   FileText,
@@ -62,7 +64,7 @@ export function UserDashboard({ user, onLogout }: UserDashboardProps) {
   };
 
   const formatDate = (date: Date | string) => {
-    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    const dateObj = typeof date === "string" ? new Date(date) : date;
     return new Intl.DateTimeFormat("fa-IR", {
       year: "numeric",
       month: "long",
@@ -75,9 +77,10 @@ export function UserDashboard({ user, onLogout }: UserDashboardProps) {
   const timeUntilExpiry = () => {
     const now = new Date().getTime();
     // Convert to Date object if it's a string
-    const expiryDate = typeof user.expiresAt === 'string' 
-      ? new Date(user.expiresAt) 
-      : user.expiresAt;
+    const expiryDate =
+      typeof user.expiresAt === "string"
+        ? new Date(user.expiresAt)
+        : user.expiresAt;
     const expiry = expiryDate.getTime();
     const diff = expiry - now;
 
@@ -104,7 +107,10 @@ export function UserDashboard({ user, onLogout }: UserDashboardProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4">
+    <div
+      className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 pt-4"
+      dir="rtl"
+    >
       <div className="max-w-6xl mx-auto space-y-6">
         {/* Header */}
         <Card className="shadow-lg border-0 bg-white/95 backdrop-blur">
@@ -279,6 +285,7 @@ export function UserDashboard({ user, onLogout }: UserDashboardProps) {
           </Card>
         )}
       </div>
+      <Footer />
     </div>
   );
 }

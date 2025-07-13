@@ -11,6 +11,7 @@ import {
 } from "./ui/card";
 import { Alert, AlertDescription } from "./ui/alert";
 import { AlertCircle, Shield, User } from "lucide-react";
+import { companyConfig } from "../config/company";
 
 interface LoginPageProps {
   onUserLogin: (username: string, password: string) => void;
@@ -45,15 +46,31 @@ export function LoginPage({ onUserLogin, onAdminLogin }: LoginPageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div
+      className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center pt-4"
+      dir="rtl"
+    >
       <div className="w-full max-w-md space-y-6">
         {/* Header */}
         <div className="text-center">
-          <div className="mx-auto h-12 w-12 bg-primary rounded-lg flex items-center justify-center mb-4">
-            <Shield className="h-6 w-6 text-primary-foreground" />
+          <div className="mx-auto h-16 w-16 bg-white rounded-lg flex items-center justify-center mb-4 shadow-lg">
+            <img
+              src={companyConfig.assets.logoIcon}
+              alt={companyConfig.company.name}
+              className="h-12 w-12 object-contain"
+              onError={(e) => {
+                const target = e.currentTarget;
+                const fallback = target.nextElementSibling as HTMLElement;
+                target.style.display = "none";
+                if (fallback) fallback.style.display = "flex";
+              }}
+            />
+            <Shield className="h-8 w-8 text-primary hidden" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">آپلود فایل</h1>
-          <p className="text-gray-600">وارد حساب کاربری خود شوید</p>
+          <h1 className="text-2xl font-bold text-gray-900">
+            {companyConfig.company.name}
+          </h1>
+          <p className="text-gray-600">{companyConfig.messages.loginMessage}</p>
         </div>
 
         {/* Login Type Selection */}
@@ -150,33 +167,6 @@ export function LoginPage({ onUserLogin, onAdminLogin }: LoginPageProps) {
                 {isLoading ? "در حال ورود..." : "ورود"}
               </Button>
             </form>
-
-            <div
-              className="mt-6 p-4 bg-primary/5 rounded-lg text-sm border border-primary/20"
-              dir="rtl"
-            >
-              <p className="mb-2 font-medium text-primary">حساب‌های آزمایشی:</p>
-              <div className="space-y-2 text-muted-foreground">
-                <div className="flex justify-between items-center">
-                  <span>کاربر:</span>
-                  <code className="bg-background px-2 py-1 rounded text-xs">
-                    user1 / pass123
-                  </code>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>کاربر:</span>
-                  <code className="bg-background px-2 py-1 rounded text-xs">
-                    user2 / pass456
-                  </code>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>مدیر:</span>
-                  <code className="bg-background px-2 py-1 rounded text-xs">
-                    admin / admin123
-                  </code>
-                </div>
-              </div>
-            </div>
           </CardContent>
         </Card>
       </div>

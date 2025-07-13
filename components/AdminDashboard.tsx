@@ -10,6 +10,8 @@ import { Alert, AlertDescription } from "./ui/alert";
 import { TemporaryAccount, UploadedFile } from "../types";
 import { UserService } from "../services/userService";
 import { FileService } from "../services/fileService";
+import { companyConfig } from "../config/company";
+import { Footer } from "./Footer";
 import {
   Users,
   Files,
@@ -131,18 +133,23 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
     return getUserFiles(userId).reduce((sum, file) => sum + file.fileSizeMb, 0);
   };
 
-  const formatDate = (date: Date) => {
+  const formatDate = (date: Date | string) => {
+    const dateObj = typeof date === "string" ? new Date(date) : date;
     return new Intl.DateTimeFormat("fa-IR", {
       year: "numeric",
       month: "long",
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
-    }).format(date);
+    }).format(dateObj);
   };
 
   const isExpired = (user: TemporaryAccount) => {
-    return user.expiresAt.getTime() < Date.now();
+    const expiryDate =
+      typeof user.expiresAt === "string"
+        ? new Date(user.expiresAt)
+        : user.expiresAt;
+    return expiryDate.getTime() < Date.now();
   };
 
   const getFileIcon = (fileType: string) => {
@@ -168,14 +175,24 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-gray-50 pt-4" dir="rtl">
       <div className="max-w-6xl mx-auto space-y-6">
         {/* Header */}
         <Card>
           <CardHeader>
             <div className="flex justify-between items-center">
               <div dir="rtl">
-                <CardTitle>پنل مدیریت سیستم آپلود فایل</CardTitle>
+                <CardTitle className="flex items-center gap-3">
+                  <img
+                    src={companyConfig.assets.logoIcon}
+                    alt={companyConfig.company.name}
+                    className="h-8 w-8 object-contain"
+                    onError={(e) => {
+                      e.currentTarget.style.display = "none";
+                    }}
+                  />
+                  پنل مدیریت {companyConfig.company.name}
+                </CardTitle>
                 <p className="text-gray-600 mt-1">
                   مدیریت کاربران و فایل‌های آپلود شده
                 </p>
@@ -277,7 +294,7 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
 
                     return (
                       <div key={user.id}>
-                        <div className="p-4 bg-gray-50 rounded-lg">
+                        <div className="pt-4 bg-gray-50 rounded-lg">
                           <div className="flex justify-between items-start mb-3">
                             <div dir="rtl">
                               <div className="flex items-center gap-2 mb-1">
@@ -576,6 +593,7 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
           </Card>
         )}
       </div>
+      <Footer />
     </div>
   );
 }

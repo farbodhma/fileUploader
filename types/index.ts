@@ -3,9 +3,9 @@ export interface TemporaryAccount {
   username: string;
   password: string;
   maxUploadQuotaMb: number;
-  expiresAt: Date;
+  expiresAt: Date | string;
   isActive: boolean;
-  createdAt: Date;
+  createdAt: Date | string;
 }
 
 export interface UploadedFile {
@@ -13,7 +13,7 @@ export interface UploadedFile {
   fileName: string;
   displayName: string;
   fileSizeMb: number;
-  uploadedAt: Date;
+  uploadedAt: Date | string;
   userId: string;
   fileUrl: string;
   fileType: string;
@@ -26,4 +26,4 @@ export interface User {
   isAdmin: boolean;
 }
 
-export type RouteType = 'login' | 'user' | 'admin';
+export type RouteType = "login" | "user" | "admin";

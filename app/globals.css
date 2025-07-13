@@ -191,3 +191,76 @@
 html {
   font-size: var(--font-size);
 }
+
+/* RTL Styles for Persian/Farsi */
+@import url("https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap");
+
+body {
+  font-family: "Vazirmatn", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  direction: rtl;
+  text-align: right;
+}
+
+/* RTL specific adjustments */
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Fix margins and paddings for RTL */
+.ml-auto {
+  margin-left: auto !important;
+  margin-right: 0 !important;
+}
+
+.mr-auto {
+  margin-right: auto !important;
+  margin-left: 0 !important;
+}
+
+/* Fix flex directions for RTL */
+.flex-rtl {
+  flex-direction: row-reverse;
+}
+
+/* Persian number styles */
+.persian-numbers {
+  font-feature-settings: "tnum";
+}
+
+/* Better text rendering for Persian */
+* {
+  -webkit-font-feature-settings: "kern", "liga", "clig", "calt";
+  font-feature-settings: "kern", "liga", "clig", "calt";
+}
+
+/* Fix button text alignment */
+button {
+  text-align: center;
+}
+
+/* Fix input text alignment for RTL */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+textarea {
+  text-align: right;
+  direction: rtl;
+}
+
+input[type="file"] {
+  direction: ltr;
+}
+
+/* Fix select dropdown for RTL */
+select {
+  text-align: right;
+  direction: rtl;
+}
+
+/* Responsive RTL adjustments */
+@media (max-width: 768px) {
+  .mobile-rtl {
+    text-align: center;
+  }
+}

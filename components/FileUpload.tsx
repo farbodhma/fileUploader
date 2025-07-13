@@ -72,9 +72,9 @@ export function FileUpload({
     ".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.gif,.mp4,.avi,.mp3,.wav,.zip,.rar";
 
   return (
-    <Card className="shadow-lg border-0 bg-white/95 backdrop-blur">
+    <Card className="shadow-lg border-0 bg-white/95 backdrop-blur" dir="rtl">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-lg" dir="rtl">
+        <CardTitle className="flex items-center gap-2 text-lg">
           <Upload className="h-5 w-5 text-primary" />
           آپلود فایل جدید
         </CardTitle>

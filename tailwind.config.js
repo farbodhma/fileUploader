@@ -57,7 +57,14 @@ module.exports = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ["Vazirmatn", "Segoe UI", "Tahoma", "Arial", "sans-serif"],
+        sans: [
+          "iransans",
+          "Vazirmatn",
+          "Segoe UI",
+          "Tahoma",
+          "Arial",
+          "sans-serif",
+        ],
       },
       keyframes: {
         "accordion-down": {

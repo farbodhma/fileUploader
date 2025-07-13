@@ -4,6 +4,14 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@font-face {
+  font-family: "iransans";
+  src: url("/fonts/iransans.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --font-size: 14px;
   --background: 255 255 255;
@@ -196,7 +204,8 @@ html {
 @import url("https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap");
 
 body {
-  font-family: "Vazirmatn", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "iransans", "Vazirmatn", "Segoe UI", Tahoma, Geneva, Verdana,
+    sans-serif;
   direction: rtl;
   text-align: right;
 }
@@ -232,6 +241,8 @@ body {
 * {
   -webkit-font-feature-settings: "kern", "liga", "clig", "calt";
   font-feature-settings: "kern", "liga", "clig", "calt";
+  font-family: "iransans", "Vazirmatn", "Segoe UI", Tahoma, Geneva, Verdana,
+    sans-serif !important;
 }
 
 /* Fix button text alignment */

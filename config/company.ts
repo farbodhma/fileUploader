@@ -14,10 +14,10 @@ export const companyConfig = {
   // اطلاعات تماس
   contact: {
     address: "تهران، میدان توحید ستارخان ابتدای کوثر دوم پلاک ۱ واحد ۵",
-    phone: "+98 21 8888 9999",
-    mobile: "+98 912 345 6789",
+    phone: "02166597644",
+    mobile: "09369360015",
     email: "mhqhavaed@yahoo.com",
-    website: "www.ghavaed-audit.ir",
+    website: "www.qavaed.ir",
   },
 
   // خدمات
@@ -48,6 +48,16 @@ export const companyConfig = {
     favicon: "/favicon.ico",
     watermark: "/images/favicon-32x32.png",
     letterhead: "/images/company/letterhead.jpg",
+    // فونت‌های سیستم
+    primaryFont: "iransans",
+    fallbackFonts: [
+      "Vazirmatn",
+      "Segoe UI",
+      "Tahoma",
+      "Geneva",
+      "Verdana",
+      "sans-serif",
+    ],
   },
 
   // تنظیمات سیستم
@@ -93,7 +103,7 @@ export const companyConfig = {
       "استفاده از این سیستم منوط به رعایت قوانین موسسه و قوانین جمهوری اسلامی ایران است",
     dataRetention:
       "فایل‌ها پس از اتمام پروژه حسابرسی، به مدت 7 سال نگهداری می‌شوند",
-    supportContact: "برای پشتیبانی فنی با شماره 021 66597644 تماس بگیرید",
+    supportContact: "برای پشتیبانی فنی با شماره 021-66597644 تماس بگیرید",
   },
 
   // تنظیمات کاربران

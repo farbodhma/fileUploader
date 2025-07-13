@@ -21,14 +21,18 @@ export function FileUpload({
   remainingQuotaMb,
 }: FileUploadProps) {
   const [displayName, setDisplayName] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      setSelectedFile(null);
+      return;
+    }
 
     setError("");
     setSuccess("");
@@ -39,11 +43,23 @@ export function FileUpload({
       setError(
         `حجم فایل (${fileSizeMb.toFixed(1)} مگابایت) از سهمیه باقی‌مانده (${remainingQuotaMb.toFixed(1)} مگابایت) بیشتر است.`
       );
+      setSelectedFile(null);
       return;
     }
 
     if (fileSizeMb > maxSizeMb) {
       setError(`حجم فایل نباید از ${maxSizeMb} مگابایت بیشتر باشد.`);
+      setSelectedFile(null);
+      return;
+    }
+
+    // فایل انتخاب شد، منتظر کلیک دکمه آپلود
+    setSelectedFile(file);
+  };
+
+  const handleUpload = async () => {
+    if (!selectedFile) {
+      setError("لطفاً ابتدا فایل را انتخاب کنید.");
       return;
     }
 
@@ -54,9 +70,10 @@ export function FileUpload({
 
     setIsUploading(true);
     try {
-      await FileService.uploadFile(file, displayName.trim(), userId);
+      await FileService.uploadFile(selectedFile, displayName.trim(), userId);
       setSuccess("فایل با موفقیت آپلود شد.");
       setDisplayName("");
+      setSelectedFile(null);
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -112,6 +129,25 @@ export function FileUpload({
           </div>
         </div>
 
+        {/* نمایش فایل انتخاب شده */}
+        {selectedFile && (
+          <div
+            className="bg-blue-50 border border-blue-200 rounded-lg p-4"
+            dir="rtl"
+          >
+            <div className="flex items-center gap-3">
+              <div className="text-2xl">📁</div>
+              <div className="flex-1">
+                <p className="font-medium text-blue-800">فایل انتخاب شده:</p>
+                <p className="text-sm text-blue-600">{selectedFile.name}</p>
+                <p className="text-xs text-blue-500">
+                  حجم: {(selectedFile.size / (1024 * 1024)).toFixed(2)} مگابایت
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div
           className="grid gap-2 text-sm text-muted-foreground bg-muted/50 p-4 rounded-lg"
           dir="rtl"
@@ -153,6 +189,15 @@ export function FileUpload({
           </Alert>
         )}
 
+        {!selectedFile && !isUploading && (
+          <div className="text-center text-muted-foreground py-4" dir="rtl">
+            <p className="text-sm">
+              ابتدا نام فایل را وارد کنید، سپس فایل را انتخاب کرده و دکمه آپلود
+              را بزنید
+            </p>
+          </div>
+        )}
+
         {isUploading && (
           <div
             className="flex items-center justify-center gap-3 py-4 text-primary"
@@ -165,26 +210,19 @@ export function FileUpload({
 
         <div className="flex justify-center pt-2">
           <Button
-            onClick={() => {
-              if (fileInputRef.current) {
-                const file = fileInputRef.current.files?.[0];
-                if (file && displayName.trim()) {
-                  handleFileSelect({ target: fileInputRef.current } as any);
-                }
-              }
-            }}
-            disabled={!displayName.trim() || isUploading}
+            onClick={handleUpload}
+            disabled={!selectedFile || !displayName.trim() || isUploading}
             size="lg"
-            className="w-full max-w-md bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-lg"
+            className="w-full max-w-md bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isUploading ? (
               <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white ml-2"></div>
                 در حال آپلود...
               </>
             ) : (
               <>
-                <Upload className="h-5 w-5 mr-2" />
+                <Upload className="h-5 w-5 ml-2" />
                 آپلود فایل
               </>
             )}

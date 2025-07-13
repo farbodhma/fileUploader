@@ -16,7 +16,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fa" dir="rtl">
-      <body className="font-sans antialiased">{children}</body>
+      <body
+        className="font-sans antialiased"
+        style={{
+          fontFamily:
+            '"iransans", "Vazirmatn", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif',
+        }}
+      >
+        {children}
+      </body>
     </html>
   );
 }

@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { Button } from './ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Badge } from './ui/badge';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Separator } from './ui/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { Alert, AlertDescription } from './ui/alert';
-import { TemporaryAccount, UploadedFile } from '../types';
-import { UserService } from '../services/userService';
-import { FileService } from '../services/fileService';
-import { 
-  Users, 
-  Files, 
-  LogOut, 
-  Download, 
-  FileText, 
+import React, { useState, useEffect } from "react";
+import { Button } from "./ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Badge } from "./ui/badge";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { Separator } from "./ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { Alert, AlertDescription } from "./ui/alert";
+import { TemporaryAccount, UploadedFile } from "../types";
+import { UserService } from "../services/userService";
+import { FileService } from "../services/fileService";
+import {
+  Users,
+  Files,
+  LogOut,
+  Download,
+  FileText,
   UserPlus,
   Clock,
   HardDrive,
   Trash2,
   AlertTriangle,
-  CheckCircle
-} from 'lucide-react';
+  CheckCircle,
+} from "lucide-react";
 
 interface AdminDashboardProps {
   onLogout: () => void;
@@ -31,13 +31,16 @@ interface AdminDashboardProps {
 export function AdminDashboard({ onLogout }: AdminDashboardProps) {
   const [users, setUsers] = useState<TemporaryAccount[]>([]);
   const [files, setFiles] = useState<UploadedFile[]>([]);
-  const [deleteConfirm, setDeleteConfirm] = useState<{ type: 'user' | 'file', id: string } | null>(null);
-  const [success, setSuccess] = useState('');
+  const [deleteConfirm, setDeleteConfirm] = useState<{
+    type: "user" | "file";
+    id: string;
+  } | null>(null);
+  const [success, setSuccess] = useState("");
   const [newUserForm, setNewUserForm] = useState({
-    username: '',
-    password: '',
+    username: "",
+    password: "",
     maxUploadQuotaMb: 50,
-    expiresInHours: 24
+    expiresInHours: 24,
   });
 
   const loadData = () => {
@@ -55,9 +58,9 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
     }
 
     // Check if username already exists
-    const existingUser = users.find(u => u.username === newUserForm.username);
+    const existingUser = users.find((u) => u.username === newUserForm.username);
     if (existingUser) {
-      alert('نام کاربری قبلاً استفاده شده است.');
+      alert("نام کاربری قبلاً استفاده شده است.");
       return;
     }
 
@@ -66,47 +69,49 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
         username: newUserForm.username,
         password: newUserForm.password,
         maxUploadQuotaMb: newUserForm.maxUploadQuotaMb,
-        expiresAt: new Date(Date.now() + newUserForm.expiresInHours * 60 * 60 * 1000),
-        isActive: true
+        expiresAt: new Date(
+          Date.now() + newUserForm.expiresInHours * 60 * 60 * 1000
+        ),
+        isActive: true,
       });
 
-      setSuccess('کاربر جدید با موفقیت ایجاد شد.');
+      setSuccess("کاربر جدید با موفقیت ایجاد شد.");
       setNewUserForm({
-        username: '',
-        password: '',
+        username: "",
+        password: "",
         maxUploadQuotaMb: 50,
-        expiresInHours: 24
+        expiresInHours: 24,
       });
       loadData();
     } catch (error) {
-      console.error('خطا در ایجاد کاربر:', error);
+      console.error("خطا در ایجاد کاربر:", error);
     }
   };
 
   const handleDeleteUser = (userId: string) => {
     // Delete user's files first
     const userFiles = FileService.getFilesByUserId(userId);
-    userFiles.forEach(file => FileService.deleteFile(file.id));
-    
+    userFiles.forEach((file) => FileService.deleteFile(file.id));
+
     // Then delete user
     UserService.deleteUser(userId);
     loadData();
     setDeleteConfirm(null);
-    setSuccess('کاربر و فایل‌های آن با موفقیت حذف شد.');
+    setSuccess("کاربر و فایل‌های آن با موفقیت حذف شد.");
   };
 
   const handleDeleteFile = (fileId: string) => {
     FileService.deleteFile(fileId);
     loadData();
     setDeleteConfirm(null);
-    setSuccess('فایل با موفقیت حذف شد.');
+    setSuccess("فایل با موفقیت حذف شد.");
   };
 
   const handleDownload = async (file: UploadedFile) => {
     try {
       const fileUrl = FileService.getFileUrl(file.id);
       if (fileUrl) {
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = fileUrl;
         link.download = file.originalName || file.displayName;
         document.body.appendChild(link);
@@ -114,12 +119,12 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
         document.body.removeChild(link);
       }
     } catch (error) {
-      console.error('خطا در دانلود فایل:', error);
+      console.error("خطا در دانلود فایل:", error);
     }
   };
 
   const getUserFiles = (userId: string) => {
-    return files.filter(file => file.userId === userId);
+    return files.filter((file) => file.userId === userId);
   };
 
   const getUserUsedQuota = (userId: string) => {
@@ -127,12 +132,12 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
   };
 
   const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat('fa-IR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Intl.DateTimeFormat("fa-IR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     }).format(date);
   };
 
@@ -141,21 +146,26 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
   };
 
   const getFileIcon = (fileType: string) => {
-    if (fileType.startsWith('image/')) return '🖼️';
-    if (fileType.startsWith('video/')) return '🎬';
-    if (fileType.startsWith('audio/')) return '🎵';
-    if (fileType.includes('pdf')) return '📄';
-    if (fileType.includes('word')) return '📝';
-    if (fileType.includes('excel') || fileType.includes('spreadsheet')) return '📊';
-    if (fileType.includes('powerpoint') || fileType.includes('presentation')) return '📈';
-    if (fileType.includes('zip') || fileType.includes('rar')) return '📦';
-    return '📁';
+    if (fileType.startsWith("image/")) return "🖼️";
+    if (fileType.startsWith("video/")) return "🎬";
+    if (fileType.startsWith("audio/")) return "🎵";
+    if (fileType.includes("pdf")) return "📄";
+    if (fileType.includes("word")) return "📝";
+    if (fileType.includes("excel") || fileType.includes("spreadsheet"))
+      return "📊";
+    if (fileType.includes("powerpoint") || fileType.includes("presentation"))
+      return "📈";
+    if (fileType.includes("zip") || fileType.includes("rar")) return "📦";
+    return "📁";
   };
 
   const totalUsers = users.length;
-  const activeUsers = users.filter(u => u.isActive && !isExpired(u)).length;
+  const activeUsers = users.filter((u) => u.isActive && !isExpired(u)).length;
   const totalFiles = files.length;
-  const totalStorageUsed = files.reduce((sum, file) => sum + file.fileSizeMb, 0);
+  const totalStorageUsed = files.reduce(
+    (sum, file) => sum + file.fileSizeMb,
+    0
+  );
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">
@@ -166,10 +176,12 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
             <div className="flex justify-between items-center">
               <div dir="rtl">
                 <CardTitle>پنل مدیریت سیستم آپلود فایل</CardTitle>
-                <p className="text-gray-600 mt-1">مدیریت کاربران و فایل‌های آپلود شده</p>
+                <p className="text-gray-600 mt-1">
+                  مدیریت کاربران و فایل‌های آپلود شده
+                </p>
               </div>
-              <Button 
-                variant="destructive" 
+              <Button
+                variant="destructive"
                 onClick={onLogout}
                 className="shadow-lg"
               >
@@ -184,7 +196,9 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
         {success && (
           <Alert className="border-green-200 bg-green-50">
             <CheckCircle className="h-4 w-4 text-green-600" />
-            <AlertDescription className="text-green-800">{success}</AlertDescription>
+            <AlertDescription className="text-green-800">
+              {success}
+            </AlertDescription>
           </Alert>
         )}
 
@@ -201,7 +215,7 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center gap-2" dir="rtl">
@@ -213,7 +227,7 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center gap-2" dir="rtl">
@@ -225,13 +239,15 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center gap-2" dir="rtl">
                 <HardDrive className="h-8 w-8 text-orange-600" />
                 <div>
-                  <p className="text-2xl font-semibold">{totalStorageUsed.toFixed(1)}</p>
+                  <p className="text-2xl font-semibold">
+                    {totalStorageUsed.toFixed(1)}
+                  </p>
                   <p className="text-sm text-gray-600">مگابایت استفاده شده</p>
                 </div>
               </div>
@@ -258,16 +274,30 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
                     const userFiles = getUserFiles(user.id);
                     const usedQuota = getUserUsedQuota(user.id);
                     const expired = isExpired(user);
-                    
+
                     return (
                       <div key={user.id}>
                         <div className="p-4 bg-gray-50 rounded-lg">
                           <div className="flex justify-between items-start mb-3">
                             <div dir="rtl">
                               <div className="flex items-center gap-2 mb-1">
-                                <h3 className="font-semibold">{user.username}</h3>
-                                <Badge variant={expired ? "destructive" : user.isActive ? "default" : "secondary"}>
-                                  {expired ? 'منقضی شده' : user.isActive ? 'فعال' : 'غیرفعال'}
+                                <h3 className="font-semibold">
+                                  {user.username}
+                                </h3>
+                                <Badge
+                                  variant={
+                                    expired
+                                      ? "destructive"
+                                      : user.isActive
+                                        ? "default"
+                                        : "secondary"
+                                  }
+                                >
+                                  {expired
+                                    ? "منقضی شده"
+                                    : user.isActive
+                                      ? "فعال"
+                                      : "غیرفعال"}
                                 </Badge>
                               </div>
                               <p className="text-sm text-gray-600">
@@ -289,30 +319,45 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
                                   تعداد فایل: {userFiles.length}
                                 </p>
                               </div>
-                              <Button 
-                                variant="destructive" 
+                              <Button
+                                variant="destructive"
                                 size="sm"
-                                onClick={() => setDeleteConfirm({ type: 'user', id: user.id })}
+                                onClick={() =>
+                                  setDeleteConfirm({
+                                    type: "user",
+                                    id: user.id,
+                                  })
+                                }
                               >
                                 <Trash2 className="h-4 w-4" />
                               </Button>
                             </div>
                           </div>
-                          
+
                           {userFiles.length > 0 && (
                             <div className="mt-3 p-3 bg-white rounded border">
-                              <p className="text-sm font-medium mb-2" dir="rtl">فایل‌های این کاربر:</p>
+                              <p className="text-sm font-medium mb-2" dir="rtl">
+                                فایل‌های این کاربر:
+                              </p>
                               <div className="space-y-2">
-                                {userFiles.map(file => (
-                                  <div key={file.id} className="flex justify-between items-center text-sm" dir="rtl">
+                                {userFiles.map((file) => (
+                                  <div
+                                    key={file.id}
+                                    className="flex justify-between items-center text-sm"
+                                    dir="rtl"
+                                  >
                                     <div className="flex items-center gap-2">
-                                      <span className="text-lg">{getFileIcon(file.fileType)}</span>
+                                      <span className="text-lg">
+                                        {getFileIcon(file.fileType)}
+                                      </span>
                                       <span>{file.displayName}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                      <span className="text-gray-500">{file.fileSizeMb.toFixed(1)} مگابایت</span>
-                                      <Button 
-                                        size="sm" 
+                                      <span className="text-gray-500">
+                                        {file.fileSizeMb.toFixed(1)} مگابایت
+                                      </span>
+                                      <Button
+                                        size="sm"
                                         variant="outline"
                                         onClick={() => handleDownload(file)}
                                       >
@@ -325,7 +370,9 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
                             </div>
                           )}
                         </div>
-                        {index < users.length - 1 && <Separator className="my-4" />}
+                        {index < users.length - 1 && (
+                          <Separator className="my-4" />
+                        )}
                       </div>
                     );
                   })}
@@ -342,8 +389,8 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
               <CardContent>
                 <div className="space-y-4">
                   {files.map((file, index) => {
-                    const fileUser = users.find(u => u.id === file.userId);
-                    
+                    const fileUser = users.find((u) => u.id === file.userId);
+
                     return (
                       <div key={file.id}>
                         <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
@@ -354,10 +401,11 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
                             <div>
                               <p className="font-medium">{file.displayName}</p>
                               <p className="text-sm text-gray-500">
-                                {file.fileSizeMb.toFixed(1)} مگابایت • {formatDate(file.uploadedAt)}
+                                {file.fileSizeMb.toFixed(1)} مگابایت •{" "}
+                                {formatDate(file.uploadedAt)}
                               </p>
                               <p className="text-sm text-gray-500">
-                                کاربر: {fileUser?.username || 'نامشخص'}
+                                کاربر: {fileUser?.username || "نامشخص"}
                               </p>
                               <p className="text-xs text-gray-400">
                                 {file.originalName}
@@ -365,24 +413,28 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
                             </div>
                           </div>
                           <div className="flex items-center gap-2">
-                            <Button 
-                              variant="outline" 
+                            <Button
+                              variant="outline"
                               size="sm"
                               onClick={() => handleDownload(file)}
                             >
                               <Download className="h-4 w-4 ml-2" />
                               دانلود
                             </Button>
-                            <Button 
-                              variant="destructive" 
+                            <Button
+                              variant="destructive"
                               size="sm"
-                              onClick={() => setDeleteConfirm({ type: 'file', id: file.id })}
+                              onClick={() =>
+                                setDeleteConfirm({ type: "file", id: file.id })
+                              }
                             >
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           </div>
                         </div>
-                        {index < files.length - 1 && <Separator className="my-2" />}
+                        {index < files.length - 1 && (
+                          <Separator className="my-2" />
+                        )}
                       </div>
                     );
                   })}
@@ -406,50 +458,70 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
                     <Input
                       id="newUsername"
                       value={newUserForm.username}
-                      onChange={(e) => setNewUserForm(prev => ({ ...prev, username: e.target.value }))}
+                      onChange={(e) =>
+                        setNewUserForm((prev) => ({
+                          ...prev,
+                          username: e.target.value,
+                        }))
+                      }
                       placeholder="نام کاربری را وارد کنید"
                       dir="rtl"
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="newPassword">رمز عبور</Label>
                     <Input
                       id="newPassword"
                       type="password"
                       value={newUserForm.password}
-                      onChange={(e) => setNewUserForm(prev => ({ ...prev, password: e.target.value }))}
+                      onChange={(e) =>
+                        setNewUserForm((prev) => ({
+                          ...prev,
+                          password: e.target.value,
+                        }))
+                      }
                       placeholder="رمز عبور را وارد کنید"
                       dir="rtl"
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="quota">سهمیه آپلود (مگابایت)</Label>
                     <Input
                       id="quota"
                       type="number"
                       value={newUserForm.maxUploadQuotaMb}
-                      onChange={(e) => setNewUserForm(prev => ({ ...prev, maxUploadQuotaMb: parseInt(e.target.value) || 0 }))}
+                      onChange={(e) =>
+                        setNewUserForm((prev) => ({
+                          ...prev,
+                          maxUploadQuotaMb: parseInt(e.target.value) || 0,
+                        }))
+                      }
                       min="1"
                       max="1000"
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="expiry">مدت اعتبار (ساعت)</Label>
                     <Input
                       id="expiry"
                       type="number"
                       value={newUserForm.expiresInHours}
-                      onChange={(e) => setNewUserForm(prev => ({ ...prev, expiresInHours: parseInt(e.target.value) || 0 }))}
+                      onChange={(e) =>
+                        setNewUserForm((prev) => ({
+                          ...prev,
+                          expiresInHours: parseInt(e.target.value) || 0,
+                        }))
+                      }
                       min="1"
                       max="168"
                     />
                   </div>
                 </div>
-                
-                <Button 
+
+                <Button
                   onClick={handleCreateUser}
                   disabled={!newUserForm.username || !newUserForm.password}
                   className="w-full md:w-auto"
@@ -469,36 +541,35 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
               <div className="flex items-center gap-3 mb-4" dir="rtl">
                 <AlertTriangle className="h-5 w-5 text-red-600" />
                 <h3 className="font-medium text-red-800">
-                  تأیید حذف {deleteConfirm.type === 'user' ? 'کاربر' : 'فایل'}
+                  تأیید حذف {deleteConfirm.type === "user" ? "کاربر" : "فایل"}
                 </h3>
               </div>
               <p className="text-red-700 mb-4" dir="rtl">
-                {deleteConfirm.type === 'user' 
-                  ? 'آیا مطمئن هستید که می‌خواهید این کاربر و تمام فایل‌های آن را حذف کنید؟'
-                  : 'آیا مطمئن هستید که می‌خواهید این فایل را حذف کنید؟'
-                }
-                {' '}این عمل قابل برگشت نیست.
+                {deleteConfirm.type === "user"
+                  ? "آیا مطمئن هستید که می‌خواهید این کاربر و تمام فایل‌های آن را حذف کنید؟"
+                  : "آیا مطمئن هستید که می‌خواهید این فایل را حذف کنید؟"}{" "}
+                این عمل قابل برگشت نیست.
               </p>
               <div className="flex gap-2 justify-end">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   size="sm"
                   onClick={() => setDeleteConfirm(null)}
                 >
                   انصراف
                 </Button>
-                <Button 
-                  variant="destructive" 
+                <Button
+                  variant="destructive"
                   size="sm"
                   onClick={() => {
-                    if (deleteConfirm.type === 'user') {
+                    if (deleteConfirm.type === "user") {
                       handleDeleteUser(deleteConfirm.id);
                     } else {
                       handleDeleteFile(deleteConfirm.id);
                     }
                   }}
                 >
-                  حذف {deleteConfirm.type === 'user' ? 'کاربر' : 'فایل'}
+                  حذف {deleteConfirm.type === "user" ? "کاربر" : "فایل"}
                 </Button>
               </div>
             </CardContent>

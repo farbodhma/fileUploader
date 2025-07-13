@@ -61,19 +61,24 @@ export function UserDashboard({ user, onLogout }: UserDashboardProps) {
     setDeleteConfirm(null);
   };
 
-  const formatDate = (date: Date) => {
+  const formatDate = (date: Date | string) => {
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
     return new Intl.DateTimeFormat("fa-IR", {
       year: "numeric",
       month: "long",
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
-    }).format(date);
+    }).format(dateObj);
   };
 
   const timeUntilExpiry = () => {
     const now = new Date().getTime();
-    const expiry = user.expiresAt.getTime();
+    // Convert to Date object if it's a string
+    const expiryDate = typeof user.expiresAt === 'string' 
+      ? new Date(user.expiresAt) 
+      : user.expiresAt;
+    const expiry = expiryDate.getTime();
     const diff = expiry - now;
 
     if (diff <= 0) return "منقضی شده";

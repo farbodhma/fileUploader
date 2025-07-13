@@ -1,19 +1,23 @@
-import { UploadedFile } from '../types';
+import { UploadedFile } from "../types";
 
 export class FileService {
-  private static readonly STORAGE_KEY = 'uploaded_files';
-  private static readonly FILES_STORAGE_KEY = 'file_data_';
+  private static readonly STORAGE_KEY = "uploaded_files";
+  private static readonly FILES_STORAGE_KEY = "file_data_";
 
-  static async uploadFile(file: File, displayName: string, userId: string): Promise<UploadedFile> {
+  static async uploadFile(
+    file: File,
+    displayName: string,
+    userId: string
+  ): Promise<UploadedFile> {
     const fileId = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const fileName = `${fileId}_${file.name}`;
-    
+
     // Convert file to base64 for storage
     const fileData = await this.fileToBase64(file);
-    
+
     // Store file data
     localStorage.setItem(this.FILES_STORAGE_KEY + fileId, fileData);
-    
+
     const uploadedFile: UploadedFile = {
       id: fileId,
       fileName,
@@ -23,7 +27,7 @@ export class FileService {
       userId,
       fileUrl: `stored:${fileId}`,
       fileType: file.type,
-      originalName: file.name
+      originalName: file.name,
     };
 
     // Save file metadata
@@ -37,21 +41,21 @@ export class FileService {
   static deleteFile(fileId: string): void {
     // Remove file data
     localStorage.removeItem(this.FILES_STORAGE_KEY + fileId);
-    
+
     // Remove from files list
     const existingFiles = this.getAllFiles();
-    const updatedFiles = existingFiles.filter(f => f.id !== fileId);
+    const updatedFiles = existingFiles.filter((f) => f.id !== fileId);
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(updatedFiles));
   }
 
   static getAllFiles(): UploadedFile[] {
     const stored = localStorage.getItem(this.STORAGE_KEY);
     if (!stored) return [];
-    
+
     try {
       return JSON.parse(stored).map((file: any) => ({
         ...file,
-        uploadedAt: new Date(file.uploadedAt)
+        uploadedAt: new Date(file.uploadedAt),
       }));
     } catch {
       return [];
@@ -59,7 +63,7 @@ export class FileService {
   }
 
   static getFilesByUserId(userId: string): UploadedFile[] {
-    return this.getAllFiles().filter(file => file.userId === userId);
+    return this.getAllFiles().filter((file) => file.userId === userId);
   }
 
   static async downloadFile(fileId: string): Promise<Blob | null> {
@@ -84,14 +88,7 @@ export class FileService {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => resolve(reader.result as string);
-      reader.onerror = error => reject(error);
+      reader.onerror = (error) => reject(error);
     });
-  }
-
-  static initializeWithMockData(): void {
-    if (localStorage.getItem(this.STORAGE_KEY)) return;
-    
-    // Initialize with empty array
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify([]));
   }
 }

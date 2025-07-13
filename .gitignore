@@ -26,6 +26,23 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env.production
+.env.development
+
+# فایل‌های حساس
+*.key
+*.pem
+*.p12
+*.pfx
+
+# بک‌آپ‌ها و لاگ‌ها
+/backups
+/logs
+*.log
+
+# فایل‌های آپلود شده
+/uploads
+/temp
 
 # vercel
 .vercel

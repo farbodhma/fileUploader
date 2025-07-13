@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { UserDashboard } from "@/components/UserDashboard";
 import { UserService } from "@/services/userService";
-import { FileService } from "@/services/fileService";
 import { TemporaryAccount } from "@/types";
 
 export default function UserPage() {
@@ -13,10 +12,6 @@ export default function UserPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Initialize services
-    UserService.initializeWithMockData();
-    FileService.initializeWithMockData();
-
     // Check if user is authenticated (you can implement proper session management here)
     const userAuth = sessionStorage.getItem("userAuth");
     if (!userAuth) {

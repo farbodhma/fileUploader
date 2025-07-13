@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Alert, AlertDescription } from "./ui/alert";
 import { Upload, AlertCircle, CheckCircle } from "lucide-react";
 import { FileService } from "../services/fileService";
+import { validateFile, FILE_UPLOAD_CONFIG } from "../config/security";
 
 interface FileUploadProps {
   userId: string;
@@ -37,7 +38,15 @@ export function FileUpload({
     setError("");
     setSuccess("");
 
-    // Validate file size
+    // اعتبارسنجی امنیتی فایل
+    const validationResult = validateFile(file);
+    if (!validationResult.isValid) {
+      setError(validationResult.error || "فایل نامعتبر است");
+      setSelectedFile(null);
+      return;
+    }
+
+    // Validate file size against user quota
     const fileSizeMb = file.size / (1024 * 1024);
     if (fileSizeMb > remainingQuotaMb) {
       setError(
@@ -85,8 +94,8 @@ export function FileUpload({
     }
   };
 
-  const acceptedFileTypes =
-    ".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.gif,.mp4,.avi,.mp3,.wav,.zip,.rar";
+  // استفاده از تنظیمات امنیتی برای انواع فایل مجاز
+  const acceptedFileTypes = FILE_UPLOAD_CONFIG.allowedMimeTypes.join(",");
 
   return (
     <Card className="shadow-lg border-0 bg-white/95 backdrop-blur" dir="rtl">

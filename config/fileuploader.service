@@ -1,0 +1,37 @@
+# فایل سرویس systemd برای سیستم آپلود فایل
+# مسیر: /etc/systemd/system/fileuploader.service
+
+[Unit]
+Description=File Uploader Next.js Application
+Documentation=https://github.com/farbodhma/fileUploader
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/var/www/fileuploader
+ExecStart=/usr/bin/npm start
+Restart=on-failure
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=fileuploader
+Environment=NODE_ENV=production
+Environment=PORT=3000
+EnvironmentFile=/var/www/fileuploader/.env.production
+
+# تنظیمات امنیتی
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/var/www/fileuploader/uploads
+ReadWritePaths=/var/www/fileuploader/backups
+ReadWritePaths=/var/www/fileuploader/logs
+
+# محدودیت منابع
+LimitNOFILE=65536
+LimitNPROC=4096
+
+[Install]
+WantedBy=multi-user.target

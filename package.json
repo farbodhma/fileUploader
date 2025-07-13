@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "node scripts/deploy.js",
+    "generate-keys": "node scripts/generate-keys.js",
+    "production-check": "npm run lint && npm run build"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.1.2",

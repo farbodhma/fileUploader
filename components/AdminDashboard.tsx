@@ -12,6 +12,7 @@ import { UserService } from "../services/userService";
 import { FileService } from "../services/fileService";
 import { companyConfig } from "../config/company";
 import { Footer } from "./Footer";
+import BackupManager from "./BackupManager";
 import {
   Users,
   Files,
@@ -24,6 +25,7 @@ import {
   Trash2,
   AlertTriangle,
   CheckCircle,
+  Database,
 } from "lucide-react";
 
 interface AdminDashboardProps {
@@ -274,9 +276,10 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
 
         {/* Main Content */}
         <Tabs defaultValue="users" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="users">مدیریت کاربران</TabsTrigger>
             <TabsTrigger value="files">مدیریت فایل‌ها</TabsTrigger>
+            <TabsTrigger value="backup">بک‌آپ سیستم</TabsTrigger>
             <TabsTrigger value="create">ایجاد کاربر جدید</TabsTrigger>
           </TabsList>
 
@@ -458,6 +461,10 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="backup" className="space-y-4">
+            <BackupManager />
           </TabsContent>
 
           <TabsContent value="create" className="space-y-4">

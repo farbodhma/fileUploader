@@ -1,19 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { LoginPage } from "@/components/LoginPage";
 import { UserService } from "@/services/userService";
-import { FileService } from "@/services/fileService";
 
 export default function Home() {
   const router = useRouter();
-
-  useEffect(() => {
-    // Initialize services with mock data
-    UserService.initializeWithMockData();
-    FileService.initializeWithMockData();
-  }, []);
 
   const handleUserLogin = (username: string, password: string) => {
     const user = UserService.authenticateUser(username, password);

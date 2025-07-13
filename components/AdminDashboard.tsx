@@ -294,7 +294,7 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
 
                     return (
                       <div key={user.id}>
-                        <div className="pt-4 bg-gray-50 rounded-lg">
+                        <div className="p-4 bg-gray-50 rounded-lg">
                           <div className="flex justify-between items-start mb-3">
                             <div dir="rtl">
                               <div className="flex items-center gap-2 mb-1">
